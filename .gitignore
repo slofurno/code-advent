@@ -1,0 +1,13 @@
+*
+!*.*
+!*/
+!makefile
+
+*.exe
+*.swp
+*.swo
+
+*~
+*.stackdump
+*.o
+*.so
