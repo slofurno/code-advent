@@ -75,10 +75,16 @@ function sandwich (str){
     return false;
 }
 
+function tryregex (str)
+{
+    return (str.match(/([\w])[\w](\1)/) && str.match(/([\w])([\w])[\w]*(\1)(\2)/));
+}
+
     fs.readFile("./input.txt", 'utf8', function (err, data) {
         var lines = data.split("\n").map(x => x.trim()).filter(x => x.length > 0);
 
-        var isnice = lines.filter(x => hasPair(x) && sandwich(x));
+        //var isnice = lines.filter(x => hasPair(x) && sandwich(x));
+        var isnice = lines.filter(tryregex);
         console.log(isnice.length);
     });
 
