@@ -4,7 +4,7 @@ var fs = require('fs');
 
 fs.readFile("./input.txt", 'utf8', function (err, data) {
 
-    var masked = maskOff(data);
+    var masked = mask(data);
     var digits = masked.match(/-?[\d]+/g);
 
     var sum = digits.map(x => x|0).reduce((a,c) => a+c);
@@ -12,7 +12,7 @@ fs.readFile("./input.txt", 'utf8', function (err, data) {
 
 });
 
-function maskOff (s){
+function mask (s){
 
     var stack = [];
 
@@ -23,21 +23,12 @@ function maskOff (s){
             var start = stack.pop();
             var sub = s.substring(start, i+1);
             if (sub.indexOf(":\"red\"")>=0){
-                s = mask(s, start, i);        
+                s = s.substring(0, start) + s.substring(i + 1);
+                i -= sub.length;
             } 
         }
     }
-
+    
     return s;
 }
 
-function mask (s, start, end)
-{
-    var wtf = [].slice.call(s);
-
-    for (var i = start; i <= end; i++){
-        wtf[i] = "X";
-    }
-
-    return wtf.join("");
-}
