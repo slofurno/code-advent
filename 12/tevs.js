@@ -15,9 +15,7 @@ fs.readFile("./input.txt", 'utf8', function (err, data) {
 
 function maskOff (s){
 
-    var original = s;
     var stack = [];
-    var astack = [];
 
     for(var i = 0; i < s.length; i++){
         if (s[i] == "{"){
