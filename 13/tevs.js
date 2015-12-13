@@ -15,7 +15,6 @@ fs.readFile("./input.txt", 'utf8', function (err, data) {
    
 
     var names = {};
-    console.log(lines);
     lines.forEach(x => names[x[0]] = true);
     var n = Object.keys(names);
 
@@ -40,8 +39,6 @@ fs.readFile("./input.txt", 'utf8', function (err, data) {
 
     perm(n, 0);        
 
-    console.log(res.length);
-
     var maxcost = 0;
   
     for(var j = 0; j < res.length; j++){
@@ -53,9 +50,6 @@ fs.readFile("./input.txt", 'utf8', function (err, data) {
         var cost = 0;
 
         for(var i = 1; i < x.length-1; i++){
-            //var right = lines.filter(s => s[0] == x[i] && s[3] == x[i+1])[0];
-            //var left = lines.filter(s => s[0] == x[i] && s[3] == x[i-1])[0];
-            //cost += getCost(right) + getCost(left); 
             var right = table[x[i]][x[i+1]];
             var left = table[x[i]][x[i-1]];
             cost += right + left;
@@ -68,20 +62,7 @@ fs.readFile("./input.txt", 'utf8', function (err, data) {
     }
     console.log(maxcost);
 
-//    console.log(Math.max(...costs));
-
 });
-
-function getCost (line)
-{
-    var op = 1;
-    if (line[1] == "lose"){
-        op = -1;
-    }
-
-    return op * line[2];
-}
-
 
 function perm (guests, i)
 {
