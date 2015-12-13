@@ -16,9 +16,7 @@ fs.readFile("./input.txt", 'utf8', function (err, data) {
 
     var names = {};
     console.log(lines);
-
     lines.forEach(x => names[x[0]] = true);
-
     var n = Object.keys(names);
 
     var mylines = n.map(x => ["Me", "gain", 0, x]);
@@ -28,7 +26,18 @@ fs.readFile("./input.txt", 'utf8', function (err, data) {
     lines = lines.concat(mylines2);
     n.push("Me");
 
-    console.log(lines, n);
+    var table = {};
+    n.forEach(a => table[a] = {});
+
+    var getSign = function(d, m) {
+        if (d == "lose"){
+            return -1 * m;
+        }
+        return m|0;
+    };
+    
+    lines.forEach(a => table[a[0]][a[3]] = getSign(a[1], a[2]));
+
     perm(n, 0);        
 
     console.log(res.length);
@@ -44,9 +53,12 @@ fs.readFile("./input.txt", 'utf8', function (err, data) {
         var cost = 0;
 
         for(var i = 1; i < x.length-1; i++){
-            var right = lines.filter(s => s[0] == x[i] && s[3] == x[i+1])[0];
-            var left = lines.filter(s => s[0] == x[i] && s[3] == x[i-1])[0];
-            cost += getCost(right) + getCost(left); 
+            //var right = lines.filter(s => s[0] == x[i] && s[3] == x[i+1])[0];
+            //var left = lines.filter(s => s[0] == x[i] && s[3] == x[i-1])[0];
+            //cost += getCost(right) + getCost(left); 
+            var right = table[x[i]][x[i+1]];
+            var left = table[x[i]][x[i-1]];
+            cost += right + left;
         }
 
 
