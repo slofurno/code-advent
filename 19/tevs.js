@@ -14,20 +14,11 @@ fs.readFile("./input.txt", 'utf8', function (err, data) {
 
     var convs = {};
     var kvp = lines.map(parse);
-
     kvp.sort((a,b) => b.v.length - a.v.length);
-
     kvp.forEach(x => convs[x.v] = x.k);
-
     console.log(kvp);
 
-
-
-    var mols = [["H", "F"], ["N", "Al"], ["O", "Mg"]];
-
-    var targets = ["HF", "NAl", "OMg"];
     var gen = 0;
-
     var cur = [mol];
     var seen = {};
 
@@ -66,62 +57,7 @@ fs.readFile("./input.txt", 'utf8', function (err, data) {
         gen = 0;
         cur = [mol];
     }
-
-
-/*
-    var gen = 1;
-
-    while(true){
-        var res = [];    
-        var seen = {};
-
-        for (var j = 0; j < mols.length; j++){
-            var atoms = mols[j];
-
-            for (var i = 0; i < atoms.length; i++){
-                var cur = atoms[i];
-                var m = convs[cur];
-
-                if (typeof(m) == "undefined")
-                {
-                    continue;   
-                }
-
-                m.forEach(a => {
-                    var copy = atoms.slice();
-                    copy[i] = a;
-                    var j = copy.join("");
-
-                    if (!seen[j]){
-                        seen[j] = true;
-                        var asdf = [].slice.call(j);
-                        res.push(asdf);
-                        
-                        if (j == tar) {
-                            console.log("match @ ", gen);
-                        }
-                    }
-                }); 
-            }
-        }
-        gen++;
-        mols = res;
-        console.log(gen, res.length);
-        console.log(res[0]);
-    }
-*/
 });
-
-function convert (e)
-{
-    return lookup[e];
-}
-
-function revert (e)
-{
-    return rlookup[e];
-}
-
 
 function parse (line)
 {
