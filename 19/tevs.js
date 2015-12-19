@@ -2,21 +2,20 @@
 
 var fs = require('fs');
 
-
 var lookup = {};
 var rlookup = {};
 var reg = /[A-Z][a-z]?/g;
 
 fs.readFile("./input.txt", 'utf8', function (err, data) {
     var lines = data.match(/.+/g);
-    var mol = "CRnCaSiRnBSiRnFArTiBPTiTiBFArPBCaSiThSiRnTiBPBPMgArCaSiRnTiMgArCaSiThCaSiRnFArRnSiRnFArTiTiBFArCaCaSiRnSiThCaCaSiRnMgArFYSiRnFYCaFArSiThCaSiThPBPTiMgArCaPRnSiAlArPBCaCaSiRnFYSiThCaRnFArArCaCaSiRnPBSiRnFArMgYCaCaCaCaSiThCaCaSiAlArCaCaSiRnPBSiAlArBCaCaCaCaSiThCaPBSiThPBPBCaSiRnFYFArSiThCaSiRnFArBCaCaSiRnFYFArSiThCaPBSiThCaSiRnPMgArRnFArPTiBCaPRnFArCaCaCaCaSiRnCaCaSiRnFYFArFArBCaSiThFArThSiThSiRnTiRnPMgArFArCaSiThCaPBCaSiRnBFArCaCaPRnCaCaPMgArSiRnFYFArCaSiThRnPBPMgAr";
-    var start = "e";
+    //var mol = "CRnCaSiRnBSiRnFArTiBPTiTiBFArPBCaSiThSiRnTiBPBPMgArCaSiRnTiMgArCaSiThCaSiRnFArRnSiRnFArTiTiBFArCaCaSiRnSiThCaCaSiRnMgArFYSiRnFYCaFArSiThCaSiThPBPTiMgArCaPRnSiAlArPBCaCaSiRnFYSiThCaRnFArArCaCaSiRnPBSiRnFArMgYCaCaCaCaSiThCaCaSiAlArCaCaSiRnPBSiAlArBCaCaCaCaSiThCaPBSiThPBPBCaSiRnFYFArSiThCaSiRnFArBCaCaSiRnFYFArSiThCaPBSiThCaSiRnPMgArRnFArPTiBCaPRnFArCaCaCaCaSiRnCaCaSiRnFYFArFArBCaSiThFArThSiThSiRnTiRnPMgArFArCaSiThCaPBCaSiRnBFArCaCaPRnCaCaPMgArSiRnFYFArCaSiThRnPBPMgAr";
+
+    var mol ="ORnPBPMgArCaCaCaSiThCaCaSiThCaCaPBSiRnFArRnFArCaCaSiThCaCaSiThCaCaCaCaCaCaSiRnFYFArSiRnMgArCaSiRnPTiTiBFYPBFArSiRnCaSiRnTiRnFArSiAlArPTiBPTiRnCaSiAlArCaPTiTiBPMgYFArPTiRnFArSiRnCaCaFArRnCaFArCaSiRnSiRnMgArFYCaSiRnMgArCaCaSiThPRnFArPBCaSiRnMgArCaCaSiThCaSiRnTiMgArFArSiThSiThCaCaSiRnMgArCaCaSiRnFArTiBPTiRnCaSiAlArCaPTiRnFArPBPBCaCaSiThCaPBSiThPRnFArSiThCaSiThCaSiThCaPTiBSiRnFYFArCaCaPRnFArPBCaCaPBSiRnTiRnFArCaPRnFArSiRnCaCaCaSiThCaRnCaFArYCaSiRnFArBCaCaCaSiThFArPBFArCaSiRnFArRnCaCaCaFArSiRnFArTiRnPMgArF";
 
     var convs = {};
     var kvp = lines.map(parse);
     kvp.sort((a,b) => b.v.length - a.v.length);
     kvp.forEach(x => convs[x.v] = x.k);
-    console.log(kvp);
 
     var gen = 0;
     var cur = [mol];
@@ -25,6 +24,7 @@ fs.readFile("./input.txt", 'utf8', function (err, data) {
     start:
     while(true){
         gen++;
+        console.log("gen", gen);
         var res = [];
         for (var j = 0; j < cur.length; j++){
             var cmol = cur[j];
@@ -37,10 +37,13 @@ fs.readFile("./input.txt", 'utf8', function (err, data) {
             for (var i = 0; i < kvp.length; i++){
 
                 var v = kvp[i].v;
-                var index = cmol.indexOf(v);
-                    
-                if (index >= 0){
+                var indices = indices_of(cmol, v);
+
+                for (var k = 0; k < indices.length; k++){
+                    var index = indices[k];
+
                     var um = cmol.slice(0, index) + kvp[i].k + cmol.slice(index + v.length);
+                     
                     if (!seen[um]){
                         seen[um] = true;
                         res.push(um);
@@ -58,6 +61,20 @@ fs.readFile("./input.txt", 'utf8', function (err, data) {
         cur = [mol];
     }
 });
+
+function indices_of (stack, needle)
+{
+    var i = 0;
+    var res = [];
+    var dx = -1;
+
+    while ((dx = stack.indexOf(needle, i)) >= 0){
+        res.push(dx);
+        i = dx + needle.length;
+    }
+
+    return res;
+}
 
 function parse (line)
 {
